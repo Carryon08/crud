@@ -26,7 +26,26 @@
                         @if (Route::has('login'))
                         <div class="hidden fixed sm:block">
                             @auth
-                            <a href="{{ url('/home') }}" class="text-sm text-gray-700 underline">Home</a>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                    <a class="dropdown-item" href="{{ route('user.profile') }}">
+                                        Perfil
+                                    </a>
+                                </div>
+                            </li>
                             @else
                             <a class="nav-link"
                                style="cursor: pointer; color: black"
@@ -46,13 +65,13 @@
         <br>
 
     </head>
-    <body class="bg-dark">
+    <body class="">
         <div id="app" class=" ">
             <h1 class="align-content-center" align="center" >Portfolio</h1>
             <div class="col-12">
                 <div class="row align-items-center">
                     <div class="col-3 bg-white m-5" style="border-radius: 5px; " >
-                        <img class="card-img-top m-1" src="../img/desck.jpg" alt="Card image cap">
+                        <img class="card-img-top m-1" src="../img/background.jpg" alt="Card image cap">
                             <h5 class="card-title p-3" align="center">Card title</h5>
                     </div>
                     <div class="col-3 bg-white m-5" style="border-radius: 5px; ">
@@ -60,7 +79,7 @@
                         <h5 class="card-title p-3" align="center">Card title</h5>
                     </div>
                     <div class="col-3 bg-white m-5" style="border-radius: 5px; " >
-                        <img class="card-img-top m-1" src="../img/desck.jpg" alt="Card image cap">
+                        <img class="card-img-top m-1" src="../img/background.jpg" alt="Card image cap">
                         <h5 class="card-title p-3" align="center">Card title</h5>
                     </div>
                 </div>
@@ -95,9 +114,9 @@
 <script>
 </script>
 <style>
-    /*body {*/
-    /*    background-image: url('../img/laptop.jpg');*/
-    /*}*/
+    body {
+        background-image: url('../img/laptop.jpg');
+    }
     h1{
         font-family: sans-serif;
         margin: auto auto;
