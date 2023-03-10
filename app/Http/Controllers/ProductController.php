@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Product;
 
-class UserController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return User[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return User::all();
+        return Product::all();
     }
 
     /**
@@ -25,10 +25,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
-        $user->fill($request->all());
-        $user->password = bcrypt($request->password);
-        $user->save();
+        $product = new Product();
+        $product->fill($request->all());
+        $product->save();
     }
 
     /**
@@ -51,11 +50,10 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        $user->name =$request->name;
-        $user->email =$request->email;
-        $user->user_type_id =$request->user_type_id;
-        $user->save();
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->save();
     }
 
     /**
@@ -66,11 +64,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
-    }
-
-    public function profile()
-    {
-        return view('profile.index');
+        Product::find($id)->delete();
     }
 }

@@ -18,7 +18,7 @@ class UserTypesSeeder extends Seeder
             'name' => 'Admin',
         ]);
         DB::table('user_types')->insert([
-            'name' => 'Patient',
+            'name' => 'User',
         ]);
     }
 }

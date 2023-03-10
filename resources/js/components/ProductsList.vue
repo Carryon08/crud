@@ -3,31 +3,31 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header" style="background-color: yellow">Lista de usuarios
+                    <div class="card-header" style="background-color: yellow">Lista de productos
                         <a class="btn btn-elevate btn-primary float-right btn-circle"
-                           @click="modalType=true, showModal()">Nuevo usuario</a></div>
+                           @click="modalType=true, showModal()">Nuevo producto</a></div>
 
                     <table class="table">
                         <thead>
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Correo</th>
+                            <th scope="col">Precio</th>
                             <th scope="col">Opciones</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="user in users" :key="user.id" >
-                            <th scope="row">{{user.id}}</th>
-                            <td>{{user.name}}</td>
-                            <td>{{user.email}}</td>
+                        <tr v-for="product in products" :key="product.id" >
+                            <td scope="row">{{product.id}}</td>
+                            <td>{{product.name}}</td>
+                            <td>{{product.price}}</td>
                             <td>
                                 <a class="btn btn-primary btn-elevate btn-circle btn-icon" title="Editar"
-                                   @click="modalType=false, showModal(user)">editar
+                                   @click="modalType=false, showModal(product)">editar
                                 </a>
                                 &nbsp;
                                 <a class="btn btn-danger btn-elevate btn-circle btn-icon"
-                                   @click="deleteUser(user.id)" title="Borrar">borrar
+                                   @click="deleteProduct(product.id)" title="Borrar">borrar
                                 </a>
                             </td>
                         </tr>
@@ -49,45 +49,26 @@
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Nombre</label>
 
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control " v-model="user.name"
+                                    <input id="name" type="text" class="form-control " v-model="product.name"
                                            name="name" value="" required autocomplete="name" autofocus>
 
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="email" class="col-md-4 col-form-label text-md-right">Correo</label>
+                                <label for="price" class="col-md-4 col-form-label text-md-right">Price</label>
 
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control" v-model="user.email"
-                                           name="email" value="" required autocomplete="email">
+                                    <input id="price" type="number" class="form-control" v-model="product.price"
+                                           name="price" value="" required>
 
-                                </div>
-                            </div>
-
-                            <div class="form-group row" v-if="modalType">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">Contraseña</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control " v-model="user.password"
-                                           name="password" required autocomplete="new-password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="user_type_id" class="col-md-4 col-form-label text-md-right">Tipo de usuario</label>
-
-                                <div class="col-md-6">
-                                    <select name="select" class="form-control " v-model="user.user_type_id">
-                                        <option value="1">Administrador</option>
-                                        <option value="2" selected>Usuario</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button @click="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">
                                 Cerrar</button>
-                            <button @click="saveUser()" type="button" class="btn btn-success">Guardar</button>
+                            <button @click="saveProduct()" type="button" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </div>
@@ -104,60 +85,54 @@
                 modalType:'',
                 modalTitle:'',
                 id:0,
-                users:[
+                products:[
                     this.name='',
-                    this.email='',
-                    this.created_at='',
+                    this.price=''
                 ],
-                user: {
+                product: {
                     name:'',
-                    email:'',
-                    password:'',
-                    user_type_id:'',
+                    price:''
                 },
             }
         },
         methods:{
-            async getUsers(){
-                const response=await axios.get('user');
-                this.users = response.data;
+            async getProducts(){
+                const response=await axios.get('product');
+                this.products = response.data;
             },
-            async deleteUser(id){
-                const response=await axios.delete('/user/'+id);
-                this.getUsers();
+            async deleteProduct(id){
+                const response=await axios.delete('/product/'+id);
+                this.getProducts();
             },
-            async showModal(data={}){
+            showModal(data={}){
                 this.modal =1 ;
                 if(this.modalType){
-                    this.modalTitle="Crear usuario";
-                    this.user.name = '';
-                    this.user.email = '';
-                    this.user.password = '';
-                    this.user.user_type_id = '';
+                    this.modalTitle="Crear producto";
+                    this.product.name = '';
+                    this.product.price = '';
                 }
                 else {
-                    this.modalTitle="Editar usuario";
+                    this.modalTitle="Editar producto";
                     this.id = data.id;
-                    this.user.name = data.name;
-                    this.user.email = data.email;
-                    this.user.user_type_id = data.user_type_id;
+                    this.product.name = data.name;
+                    this.product.price = data.price;
                 }
             },
             async closeModal(){
                 this.modal =0 ;
             },
-            async saveUser(id){
+            async saveProduct(id){
                 if(this.modalType) {
-                    axios.post('/user',this.user);
+                    axios.post('/product',this.product);
                 }
                 else {
-                    axios.put('/user/'+this.id,this.user);
+                    axios.put('/product/'+this.id,this.product);
                 }
                 this.closeModal();
             },
         },
         created(){
-            this.getUsers();
+            this.getProducts();
         },
 
     }
@@ -169,3 +144,4 @@
 
     }
 </style>
+
